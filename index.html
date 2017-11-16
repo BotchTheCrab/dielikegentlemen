@@ -1,8 +1,174 @@
 <html>
   <head>
     <title>Die Like Gentlemen</title>
+
+    <meta name="viewport" content="width=device-width" />
+
+    <link rel="stylesheet" type="text/css" href="css/cerberus.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="src/js/ahrriss.js"></script>
   </head>
-  <body>
-    Die Like Gentlemen
+  <body onload="galleryStart()">
+    <header id="dlg-header">
+      <span class="duellist-left"></span>
+      <span class="band-name">Die Like Gentlemen</span>
+      <span class="duellist-right"></span>
+    </header>
+
+    <main>
+
+      <!-- About -->
+      <section class="column-left" id="dlg-about">
+        <header>About</header>
+
+        <div class="media-container" id="dlg-about-images" onclick="launchImage()">
+          <img id="dlg-about-image-placeholder" src="images/gallery/placeholder.png" />
+
+          <img id="dlg-image-0" src="images/gallery/DLG-KristinLee-253-resized.jpg" class="active" />
+          <img id="dlg-image-1" src="images/gallery/DLG-live-KentonClub.png" />
+          <img id="dlg-image-2" src="images/gallery/DLG-live-Spokane.png" />
+        </div>
+
+        <p>Like an unwanted gray hair, Die Like Gentlemen sprung out of the heavy music scene in Portland, Oregon: distinguished, ornery, and unstoppable. Steeped in Sabbathy riffs, progressive arrangements and melodic anger, these whiskey-swilling gentlemen are aiming to spread their sludge across the Pacific Northwest.</p>
+      </section>
+
+      <!-- Alive -->
+      <section class="column-left" id="dlg-alive">
+        <header>Alive</header>
+
+         <!-- width="560" height="315" -->
+        <div class="media-container" id="dlg-alive-video"><iframe src="https://www.youtube.com/embed/BIHY9NKm6JQ?start=4" frameborder="0" allowfullscreen></iframe></div>
+
+        <div id="gig-container">
+
+          <div class="gig">
+            <div class="gig-date">Nov 12</div>
+            <div class="gig-details">
+              <div class="gig-city">Portland, OR</div>
+              <div class="gig-venue">Twilight Cafe &amp; Bar</div>
+              <div class="gig-bands">with Witch Ripper, Skulldozer</div>
+            </div>
+            <div class="gig-link"><a href="https://www.facebook.com/events/1937147186540799/" target="_blank">details</a></div>
+          </div>
+
+          <div class="gig">
+            <div class="gig-date">Nov 22</div>
+            <div class="gig-details">
+              <div class="gig-city">Portland, OR</div>
+              <div class="gig-venue">Eagle Eye Tavern</div>
+              <div class="gig-bands"><b>Acoustic show</b> with Brown Erbe</div>
+            </div>
+            <div class="gig-link"><a href="https://www.facebook.com/events/134442457206734/" target="_blank">details</a></div>
+          </div>
+
+          <div class="gig">
+            <div class="gig-date">Nov 24</div>
+            <div class="gig-details">
+              <div class="gig-city">Salem, OR</div>
+              <div class="gig-venue">The Space Concert Club</div>
+              <div class="gig-bands">with Earthling, Lojia</div>
+            </div>
+            <div class="gig-link"><a href="https://www.facebook.com/events/292432034585376/" target="_blank">details</a></div>
+          </div>
+
+          <div class="gig">
+            <div class="gig-date">Dec 4</div>
+            <div class="gig-details">
+              <div class="gig-city">Eugene, OR</div>
+              <div class="gig-venue">Old Nick's Pub</div>
+              <div class="gig-bands">with UNSANE, Plaque Marks, <span>An Empty Room</span></div>
+            </div>
+            <div class="gig-link"><a href="https://www.facebook.com/events/903129323175856/" target="_blank">details</a></div>
+          </div>
+
+          <div class="gig">
+            <div class="gig-date">Dec 21</div>
+            <div class="gig-details">
+              <div class="gig-city">Portland, OR</div>
+              <div class="gig-venue">The Know</div>
+              <div class="gig-bands">with The Desolate, Aseitas</div>
+            </div>
+            <div class="gig-link"><a href="https://www.facebook.com/events/392185457905172/" target="_blank">details</a></div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Aloud -->
+      <section class="column-right" id="dlg-aloud">
+        <header>Aloud</header>
+
+        <div class="media-container" id="dlg-aloud-player">
+
+          <script type="text/javascript">
+
+            var dlgPlaylist = [
+              { src: "/media/Five Easy Lies/Die Like Gentlemen - Five Easy Lies - 4 - Stray Demon.mp3", title: "Stray Demon", album: "Five Easy Lies" },
+              { src: "/media/The Quickening Light/Die Like Gentlemen - The Quickening Light - 2 - Unnamed.mp3", title: "Unnamed", album: "The Quickening Light" },
+              { src: "/media/Five Easy Lies/Die Like Gentlemen - Five Easy Lies - 1 - Unstoppable.mp3", title: "Unstoppable", album: "Five Easy Lies" },
+              { src: "/media/The Quickening Light/Die Like Gentlemen - The Quickening Light - 1 - Cerberus Sleeps.mp3", title: "Cerberus Sleeps", album: "The Quickening Light" },
+              { src: "/media/Five Easy Lies/Die Like Gentlemen - Five Easy Lies - 3 - Animals of Romance.mp3", title: "Animals of Romance", album: "Five Easy Lies" },
+              { src: "/media/Distinguished Company/Die Like Gentlemen - Distinguished Company - 1 - The Nod.mp3", title: "The Nod", album: "Distinguished Company" },
+              { src: "/media/Romantic Delusions of Hell/Die Like Gentlemen - Romantic Delusions of Hell - 3 - Ten Hells.mp3", title: "Ten Hells", album: "Romantic Delusions of Hell" }
+            ];
+
+            embedAudioPlaylist('dlg-aloud-player', dlgPlaylist, 350);
+
+          </script>
+
+        </div>
+
+        <div id="releases-container">
+
+          <div>
+            <a href="https://dielikegentlemen.bandcamp.com/album/the-quickening-light" target="_blank">
+              <div><img src="images/releases/tn-the-quickening-light.png" /></div>
+              <div>The Quickening Light</div>
+            </a>
+          </div>
+
+          <div>
+            <a href="https://dielikegentlemen.bandcamp.com/album/five-easy-lies" target="_blank">
+              <div><img src="images/releases/tn-five-easy-lies.png" /></div>
+              <div>Five Easy Lies</div>
+            </a>
+          </div>
+
+          <div>
+            <a href="https://dielikegentlemen.bandcamp.com/album/distinguished-company" target="_blank">
+              <div><img src="images/releases/tn-distinguished-company.png" /></div>
+              <div>Distinguished Company</div>
+            </a>
+          </div>
+
+          <div>
+            <a href="https://dielikegentlemen.bandcamp.com/album/romantic-delusions-of-hell" target="_blank">
+              <div><img src="images/releases/tn-romantic-delusions-of-hell.png" /></div>
+              <div>Romantic Delusions of Hell</div>
+            </a>
+          </div>
+
+        </div>
+
+        <div id="bandcamp-promo">
+          <a href="https://dielikegentlemen.bandcamp.com/" target="_blank">Listen and Buy on <img src="images/bandcamp.png" /></a>
+        </div>
+
+      </section>
+
+      <!-- contact -->
+      <section class="column-right" id="dlg-contact">
+        <a href="mailto:band@dielikegentlemen.com">Band@DieLikeGentlemen.com</a>
+        <div id="dlg-footer-icons">
+          <a href="https://www.facebook.com/DieLikeGentlemen" target="_blank"><img src="images/icon-facebook.png" /></a>
+          <a href="https://www.youtube.com/channel/UCiJYoiM9hO2hg2euM759Pzw" target="_blank"><img src="images/icon-youtube.png" /></a>
+          <a href="https://www.instagram.com/dielikegentlemen/" target="_blank"><img src="images/icon-instagram.png" /></a>
+        </div>
+      </footer>
+
+    </main>
+
   </body>
 </html>

@@ -1,0 +1,440 @@
+@import 'fonts';
+
+$pathImages: "../images";
+
+$color-brown: #270d05;
+$color-beige: #bebf9b;
+$color-white: #fff;
+$color-black: #000;
+$color-tan: #726650;
+
+$colorBackground: $color-brown;
+$colorText: $color-beige;
+$colorTextHighlight: $color-white;
+$colorDropShadow: $color-black;
+$colorSectionHeaderUnderline: $color-tan;
+$colorContactBackground: $color-beige;
+
+@mixin imgBoxShadow {
+  box-shadow: -5px 5px 5px rgba(0, 0, 0, 0.4);
+}
+
+@mixin hoverTransition {
+  transition: all linear 0.1s;
+
+  &:hover {
+    transform: translate(1px, 1px);
+  }
+}
+
+
+body {
+  margin: 0 0 25px;
+  background-color: $colorBackground;
+  background-image: url("#{$pathImages}/wallpaper-condemned-8bit-3pct.png");
+  background-position: top center;
+
+  font-family: 'Packard Antique';
+  font-size: 13pt;
+  letter-spacing: 0.05em;
+  color: $colorText;
+  text-shadow: 2px 2px 2px rgba($color-black, 0.7);
+}
+
+a {
+  color: $colorTextHighlight;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+
+#dlg-header {
+  text-align: center;
+
+  background-color: rgba($color-black, 0.35);
+  border-bottom: 0.2em solid #000;
+  // padding: 2em 1em;
+
+  padding-top: 1em;
+  margin-bottom: 2em;
+
+  .band-name {
+    display: inline-block;
+    font-family: 'Caslon Antique';
+    font-variant: small-caps;
+    color: $colorText;
+    font-size: 5.25em;
+    text-shadow: 0.05em 0.05em 0.01em $colorDropShadow;
+    letter-spacing: 0.01em;
+    vertical-align: 0.4em;
+  }
+
+  .duellist-left,
+  .duellist-right {
+    display: inline-block;
+    width: 130px;
+    height: 130px;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  .duellist-left {
+    background-image: url("#{$pathImages}/duellist-left.png");
+  }
+  .duellist-right {
+    background-image: url("#{$pathImages}/duellist-right.png");
+  }
+}
+
+
+main {
+  max-width: 1000px;
+  margin: 0 auto;
+  box-sizing: border-box;
+
+  column-count: 2;
+  column-gap: 100px;
+}
+
+
+section {
+  // padding-bottom: 25px;
+  box-sizing: border-box;
+  break-inside: avoid;
+
+  width: 500px;
+  max-width: 500px;
+  min-width: 500px;
+
+  margin: 0 auto 3em;
+
+
+  & > header {
+    font-size: 1.6em;
+    font-family: 'Caslon Antique';
+    font-variant: small-caps;
+
+    padding-left: 0.1em;
+    line-height: 0.95em;
+    border-bottom: 1px solid $colorSectionHeaderUnderline;
+    margin-bottom: 0.5em;
+  }
+
+  &.column-left {
+  }
+
+  &.column-right {
+    width: 450px;
+    max-width: 450px;
+    min-width: 450px;
+  }
+
+  & > .media-container {
+    background-color: rgba($color-black, 0.1);
+    margin: 0 0 1em;
+    @include imgBoxShadow;
+
+    img,
+    iframe,
+    audio {
+      width: 100%;
+    }
+
+    ul, ol {
+      margin: 0;
+      padding: 0.5em 1em 0.5em 2em;
+
+      li {
+        margin-bottom: 0.25em;
+        font-size: 0.75em;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #222;
+        }
+
+        a {
+          font-size: 1.25em;
+          margin-left: 0.4em;
+          color: $colorText;
+
+          &:hover {
+            text-decoration: none;
+          }
+
+          .media-title {
+            font-weight: bold;
+          }
+
+          .media-album {
+            font-size: 0.9em;
+            font-style: italic;
+            opacity: 0.75;
+            margin-left: 0.5em;
+
+            &::before {
+              content: ' - ';
+            }
+          }
+        }
+
+        &.active {
+          cursor: default;
+
+          a {
+            cursor: default;
+            color: $colorTextHighlight;
+          }
+        }
+      }
+    }
+  }
+
+  p {
+    margin: 0 0 1em;
+    text-align: justify;
+    line-height: 1.4em;
+  }
+}
+
+
+
+#dlg-about { }
+#dlg-alive { }
+#dlg-aloud { }
+
+
+#dlg-about-images {
+  position: relative;;
+
+  img {
+    // display: none;
+    opacity: 0;
+    transition: opacity linear 1s;
+    position: absolute;
+    top: 0;
+    z-index: 99;
+    cursor: pointer;
+
+    &#dlg-about-image-placeholder {
+      display: block;
+      position: static;
+      z-index: 0;
+    }
+
+    &.active {
+      // display: block;
+      opacity: 1;
+      z-index: 100;
+    }
+  }
+}
+
+
+#dlg-alive-video {
+  & > iframe {
+    height: 300px;
+  }
+}
+
+
+#gig-container {
+
+  .gig {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 0.5em;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid rgba($color-white, 0.05);
+
+    .gig-date {
+      flex-basis: 100px;
+      color: $colorTextHighlight;
+    }
+
+    .gig-details {
+      flex-basis: 300px;
+
+      .gig-city {
+        color: $colorTextHighlight;
+      }
+
+      .gig-bands {
+        span {
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .gig-link {
+      flex-basis: 80px;
+      text-align: right;
+    }
+  }
+
+}
+
+
+#dlg-aloud-player {
+  margin-bottom: 2em;
+}
+
+
+#releases-container {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+  & > div {
+    width: 175px;
+    text-align: center;
+    margin: 0 0.5em 2em;
+    // font-size: 0.9em;
+    @include hoverTransition;
+
+    img {
+      margin-bottom: 0.25em;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+  }
+
+}
+
+#bandcamp-promo {
+  text-align: center;
+  font-variant: small-caps;
+  font-size: 1.2em;
+  margin-top: 1em;
+
+  a {
+    color: $colorText;
+
+    &:hover {
+      color: $colorTextHighlight;
+      text-decoration: none;
+    }
+  }
+
+  img {
+    vertical-align: -11px;
+  }
+}
+
+
+#dlg-contact {
+  background-color: rgba($color-beige, 0.1);
+  text-align: center;
+  padding: 1.5em;
+  margin-top: 3em;
+
+  & > a {
+    font-size: 1.25em;
+  }
+}
+
+
+#dlg-footer-icons {
+  margin-top: 1.5em;
+
+  img {
+    position: relative;
+    height: 80px;
+    width: 80px;
+    margin: 0 0.5em;
+    @include hoverTransition;
+  }
+}
+
+
+@media (max-width: 1100px) {
+
+  #dlg-header {
+    .band-name {
+      font-size: 4em;
+      vertical-align: 0.2em;
+    }
+    .duellist-left,
+    .duellist-right {
+      width: 75px;
+      height: 75px;
+    }
+  }
+
+  main {
+    column-count: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  section {
+    &.column-right {
+      width: 500px;
+      max-width: 500px;
+      min-width: 500px;
+    }
+  }
+
+  #dlg-about    { order: 1; }
+  #dlg-aloud    { order: 2; }
+  #dlg-alive    { order: 3; }
+  #dlg-contact  { order: 4; }
+
+}
+
+@media (max-width: 750px) {
+
+  #dlg-header {
+    .band-name {
+      // font-size: 4em;
+    }
+    .duellist-left,
+    .duellist-right {
+      display: none;
+    }
+  }
+}
+
+
+
+@media (max-width: 600px) {
+
+  body {
+    font-size: 11pt;
+  }
+
+  #dlg-header {
+    padding-top: 0.25em;
+
+    .band-name {
+      font-size: 2.5em;
+    }
+  }
+
+  section, section.column-left, section.column-right {
+    width: auto;
+    max-width: auto;
+    min-width: auto;
+    padding: 0 1em;
+  }
+
+  #dlg-alive-video {
+    & > iframe {
+      height: 180px;
+    }
+  }
+
+  #dlg-footer-icons {
+    img {
+      width: 60px;
+      height: 60px;
+    }
+  }
+}
