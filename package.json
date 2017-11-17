@@ -17,7 +17,13 @@
   },
   "homepage": "https://github.com/BotchTheCrab/dielikegentlemen#readme",
   "devDependencies": {
+    "browserify": "^14.5.0",
     "gulp": "^3.9.1",
-    "gulp-sass": "^3.1.0"
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.1"
+  },
+  "dependencies": {
+    "fetchival": "^0.3.3",
+    "lie": "^3.1.1"
   }
 }

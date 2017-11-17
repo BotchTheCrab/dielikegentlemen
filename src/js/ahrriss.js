@@ -1,4 +1,8 @@
 
+require('lie/polyfill');
+require('fetchival');
+
+
 var imageIds = ['dlg-image-0', 'dlg-image-1', 'dlg-image-2'];
 
 var galleryTimeout;
@@ -38,24 +42,29 @@ function launchImage() {
 }
 
 
+/****************************/
+/****** AUDIO PLAYLIST ******/
+/****************************/
 
+var playlistContainer, audioElement, playlistElement, trackElements, currentTrackNumber;
 
 /**
   expected playlist format:
   [{ src: 'path/to/file', title: 'title', artist: 'artist' }, {}, {}]
 */
 function embedAudioPlaylist(targetId, audioPlaylist, height, width) {
-  var targetElm = document.getElementById(targetId);
-  if (!targetElm) { return; }
-  // targetElm.className = 'audio-playlist-container';
+  playlistContainer = document.getElementById(targetId);
+  if (!playlistContainer) { return; }
+  // playlistContainer.className = 'audio-playlist-container';
 
   var audio = document.createElement('audio');
   if (audio.play) {
     // HTML5 <audio> element is supported
     audio.src = audioPlaylist[0].src;	// load initial entry
     audio.controls = 'controls';
+    audio.controlsList = 'nodownload';
 
-    targetElm.appendChild(audio);
+    playlistContainer.appendChild(audio);
 
     // create playlist display
     var playlist = document.createElement('ol');
@@ -84,10 +93,10 @@ function embedAudioPlaylist(targetId, audioPlaylist, height, width) {
       playlist.appendChild(listItem);
     }
 
-    targetElm.appendChild(audio);
-    targetElm.appendChild(playlist);
+    playlistContainer.appendChild(audio);
+    playlistContainer.appendChild(playlist);
 
-    initPlaylist(targetId);
+    initPlaylist();
     audio.volume = 1;
   }
   else
@@ -156,50 +165,68 @@ function embedAudioPlaylist(targetId, audioPlaylist, height, width) {
     objectNode.setAttribute('height', playerHeight);
     objectNode.appendChild(embedNode);
 
-    targetElm.appendChild(objectNode);
+    playlistContainer.appendChild(objectNode);
   }
 
 }
 
-function initPlaylist(targetId) {
-    var currentIndex = 0;
-    var audio = $('#' + targetId + ' audio')[0];
-    var playlist = $('#' + targetId + ' .media-playlist');
-    var tracks = playlist.find('li a');
-    var playlistLength = tracks.length;
-    audio.volume = .10;
-    playlist.find('a').click(function(e) {
+function initPlaylist() {
+    if (!playlistContainer) { return; }
+
+    // initialize global player variables
+    audioElement = playlistContainer.getElementsByTagName('audio')[0];
+    playlistElement = playlistContainer.getElementsByClassName('media-playlist')[0];
+    trackElements = playlistElement.getElementsByTagName('a');
+
+    var playlistLength = trackElements.length;
+    currentTrackNumber = 1;
+
+    audioElement.volume = .10;
+
+    for (var x = 0; x < trackElements.length; x++) {
+      trackElements[x].setAttribute('track', x + 1);
+
+      trackElements[x].addEventListener('click', function(e) {
         e.preventDefault();
-        var link = $(this);
-        currentIndex = link.parent().index();
-        playPlaylistTrack(link, audio);
-    });
-    audio.addEventListener('ended', function(e) {
-        // play next track (if exists)
-        if (currentIndex < playlistLength - 1) {
-          currentIndex++;
-          var link = playlist.find('a')[currentIndex];
-          playPlaylistTrack($(link), audio);
-        } else {
-          currentIndex = 0;
-          var link = playlist.find('a')[currentIndex];
-          loadPlaylistTrack($(link), audio);
-        }
+        currentTrackNumber = this.getAttribute('track');
+        playPlaylistTrack(this);
+      })
+    }
+
+    audioElement.addEventListener('ended', function(e) {
+      console.info('ended: currentTrackNumber = ' + currentTrackNumber)
+
+      // play next track (if exists)
+      if (currentTrackNumber < playlistLength) {
+        currentTrackNumber++;
+        playPlaylistTrack(trackElements[currentTrackNumber - 1]);
+      } else {
+        currentTrackNumber = 1;
+        loadPlaylistTrack(trackElements[currentTrackNumber - 1]);
+      }
     });
 }
 
-function loadPlaylistTrack(link, player) {
-    player.src = link.attr('href');
-    var item = link.parent();
-    item.addClass('active').siblings().removeClass('active');
-    player.load();
+function loadPlaylistTrack(link) {
+  audioElement.src = link.getAttribute('href');
 
-    // scroll to loaded item
-    var playlist = item.parent();
-    playlist.scrollTop(playlist.scrollTop() + item.position().top)
+  var item = link.parentElement;
+
+  for (var x = 0; x < trackElements.length; x++) {
+    if (trackElements[x] == link) {
+      link.parentElement.classList.add('active');
+    } else {
+      trackElements[x].parentElement.classList.remove('active');
+    }
+  }
+  audioElement.load();
+
+  // scroll to loaded item
+  // var playlist = item.parent();
+  // playlist.scrollTop(playlist.scrollTop() + item.position().top)
 }
 
-function playPlaylistTrack(link, player){
-  loadPlaylistTrack(link, player);
-  player.play();
+function playPlaylistTrack(link){
+  loadPlaylistTrack(link);
+  audioElement.play();
 }
