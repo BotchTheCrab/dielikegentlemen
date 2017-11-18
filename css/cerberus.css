@@ -56,6 +56,12 @@ section > .media-container ul li.active a, section > .media-container ol li.acti
 
 section p { margin: 0 0 1em; text-align: justify; line-height: 1.4em; }
 
+#dlg-about, #dlg-alive, #dlg-aloud, #dlg-contact { display: none; opacity: 0; transition: opacity 0.5s linear; }
+
+#dlg-about.loaded, #dlg-alive.loaded, #dlg-aloud.loaded, #dlg-contact.loaded { display: block; }
+
+#dlg-about.revealed, #dlg-alive.revealed, #dlg-aloud.revealed, #dlg-contact.revealed { opacity: 1; }
+
 #dlg-about-images { position: relative; }
 
 #dlg-about-images img { opacity: 0; transition: opacity linear 1s; position: absolute; top: 0; z-index: 99; cursor: pointer; }

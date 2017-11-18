@@ -201,9 +201,21 @@ section {
 
 
 
-#dlg-about { }
-#dlg-alive { }
-#dlg-aloud { }
+#dlg-about,
+#dlg-alive,
+#dlg-aloud,
+#dlg-contact {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s linear;
+
+  &.loaded {
+    display: block;
+  }
+  &.revealed {
+    opacity: 1;
+  }
+}
 
 
 #dlg-about-images {
