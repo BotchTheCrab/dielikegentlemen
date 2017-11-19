@@ -12,6 +12,8 @@ var gigContainer = document.getElementById('gig-container');
 if (gigContainer) {
 
   fetchival(api.root + 'gigs' + '?apikey=' + api.key).get().then(function(resp) {
+    console.info('/gigs content returned')
+
     var today = new Date();
     today.setHours(0, 0, 0);
 
@@ -26,6 +28,7 @@ if (gigContainer) {
       return a.Date > b.Date;
     });
 
+    // render upcoming gigs
     for (var x = 0; x < upcomingGigs.length; x++) {
       var gig = upcomingGigs[x];
 

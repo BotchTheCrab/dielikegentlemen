@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/BotchTheCrab/dielikegentlemen.git"
   },
-  "author": "",
+  "author": "Botch the Crab",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/BotchTheCrab/dielikegentlemen/issues"
@@ -21,11 +21,12 @@
     "gulp": "^3.9.1",
     "gulp-sass": "^3.1.0",
     "gulp-sourcemaps": "^2.6.1",
+    "gulp-uglify": "^3.0.0",
+    "uglify": "^0.1.5",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "fetchival": "^0.3.3",
-    "lie": "^3.1.1"
+    "fetchival": "^0.3.3"
   }
 }

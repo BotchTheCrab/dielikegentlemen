@@ -1,5 +1,9 @@
 
+console.info('HERE')
+
 document.addEventListener('DOMContentLoaded', function() {
+
+  console.info('DOMContentLoaded')
 
   var about = require('./about');
   var aloud = require('./aloud');

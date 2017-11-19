@@ -15,6 +15,8 @@ var playlistContainer = document.getElementById('dlg-aloud-player'),
 if (playlistContainer) {
 
   fetchival(api.root + 'playlist' + '?apikey=' + api.key).get().then(function(resp) {
+    console.info('/playlist content returned')
+
     var rawPlaylist = resp && resp.length && resp[0].Songs;
     if (!rawPlaylist) { return; }
 
@@ -41,6 +43,7 @@ function embedAudioPlaylist(audioPlaylist, height, width) {
     audio.src = audioPlaylist[0].src;	// load initial entry
     audio.controls = 'controls';
     audio.controlsList = 'nodownload';
+    audio.preload = 'none';
 
     playlistContainer.appendChild(audio);
 

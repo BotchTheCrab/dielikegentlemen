@@ -1,4 +1,5 @@
 @import 'fonts';
+@import 'youtube-player';
 
 $pathImages: "../images";
 
@@ -247,7 +248,7 @@ section {
 
 #dlg-alive-video {
   & > iframe {
-    height: 300px;
+    // height: 300px;
   }
 }
 

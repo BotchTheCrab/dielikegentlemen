@@ -2,6 +2,7 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     sourcemaps = require('gulp-sourcemaps'),
     browserify = require('browserify'),
+  	uglify = require('gulp-uglify'),
     source = require('vinyl-source-stream'),
   	buffer = require('vinyl-buffer');
 
@@ -27,8 +28,8 @@ var paths = {
 function sassCompile(srcPath, destPath) {
 	gulp.src(srcPath)
 		.pipe(sourcemaps.init())
-		// .pipe(sass({outputStyle: 'compressed'}))
-		.pipe(sass({outputStyle: 'compact'}))
+		.pipe(sass({outputStyle: 'compressed'}))
+		// .pipe(sass({outputStyle: 'compact'}))
 		.pipe(sourcemaps.write('.'))
 		.pipe(gulp.dest(destPath));
 };
@@ -48,12 +49,12 @@ gulp.task('Sass-Watch', function() {
 
 gulp.task('JavaScript-Bundle', function() {
 	// Grabs the application.js file
-    return browserify(paths.scripts.root)
-        .bundle()
-        .pipe(source(paths.scripts.destination.name))
-		.pipe(buffer())
-		// .pipe(uglify())
-      .pipe(gulp.dest(paths.scripts.destination.folder));
+  return browserify(paths.scripts.root)
+    .bundle()
+    .pipe(source(paths.scripts.destination.name))
+  	.pipe(buffer())
+  	.pipe(uglify())
+    .pipe(gulp.dest(paths.scripts.destination.folder));
 })
 
 gulp.task('JavaScript-Watch', function() {

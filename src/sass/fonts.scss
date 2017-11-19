@@ -26,3 +26,18 @@
   font-weight: bold;
   font-style: italic;
 }
+
+@font-face {
+  font-family: 'Packard Antique';
+  src: url('../fonts/packard-antique/PackardAntique.ttf');
+  src: url('../fonts/packard-antique/PackardAntique.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Packard Antique';
+  src: url('../fonts/packard-antique/PackardAntique-Bold.ttf');
+  src: url('../fonts/packard-antique/PackardAntique-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
