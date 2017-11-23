@@ -1,5 +1,6 @@
 /****** GIG LISTINGS ******/
 
+var ahrriss = require('./ahrriss');
 var fetchival = require('fetchival');
 var api = require('./api');
 
@@ -7,17 +8,24 @@ var aliveContainer = document.getElementById('dlg-alive');
 
 var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+var resp = ahrriss.apiResponse;
+
+var videoContainer = document.getElementById('dlg-alive-video');
 var gigContainer = document.getElementById('gig-container');
+
+if (videoContainer) {
+  var videoLink = resp[0].VideoLink;
+  if (videoLink) {
+    videoInit(videoLink);
+  }
+}
 
 if (gigContainer) {
 
   fetchival(api.root + 'gigs' + '?apikey=' + api.key).get().then(function(resp) {
-    console.info('/gigs content returned')
-
+    // filter out past gigs
     var today = new Date();
     today.setHours(0, 0, 0);
-
-    // filter out past gigs
     var upcomingGigs = resp.filter(function(gig) {
       var gigDate = new Date(gig.Date);
       return gigDate >= today;
@@ -46,7 +54,7 @@ if (gigContainer) {
         gigContainer.innerHTML += gigHtml;
     }
 
-    revealSection(aliveContainer);
+    ahrriss.revealSection(aliveContainer);
   });
 
 }
@@ -65,4 +73,51 @@ function formatOtherBands(sBands) {
   }
 
   return aBands.join(', ');
+}
+
+
+
+
+/****** YOUTUBE VIDEO ******/
+
+/* Basd on Light YouTube Embeds by @labnol : http://labnol.org/?p=27941 */
+
+
+function videoInit(videoLink) {
+  // videoContainer.innerHTML = '<iframe src="' + videoLink + '" frameborder="0" allowfullscreen></iframe>';
+
+  // https://www.youtube.com/embed/BIHY9NKm6JQ?start=4
+
+  var videoParse = videoLink.match(/embed\/([\d\w]+)(\?start\=)*(\d*)/);
+  if (videoParse.length > 1) {
+    var embedId = videoParse[1];
+    var startPos = videoParse[3] || 0;
+
+    var div = document.createElement("div");
+    div.setAttribute("data-id", embedId);
+    if (startPos) { div.setAttribute("data-start", startPos); }
+    div.innerHTML = labnolThumb(embedId);
+    div.onclick = labnolIframe;
+    videoContainer.appendChild(div);
+  }
+}
+
+function labnolThumb(id) {
+  var thumb = '<img src="https://i.ytimg.com/vi/ID/hqdefault.jpg">',
+      play = '<div class="play"></div>';
+  return thumb.replace("ID", id) + play;
+}
+
+function labnolIframe() {
+  var iframe = document.createElement("iframe");
+  var embedSrc = "https://www.youtube.com/embed/ID?autoplay=1";
+  var embedId = this.dataset.id;
+  embedSrc = embedSrc.replace("ID", embedId);
+  var startPos = this.dataset.start;
+  if (startPos) { embedSrc += '&start=' + startPos; }
+
+  iframe.setAttribute("src", embedSrc);
+  iframe.setAttribute("frameborder", "0");
+  iframe.setAttribute("allowfullscreen", "1");
+  this.parentNode.replaceChild(iframe, this);
 }

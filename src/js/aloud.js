@@ -1,7 +1,6 @@
 /****** AUDIO PLAYLIST ******/
 
-var fetchival = require('fetchival');
-var api = require('./api');
+var ahrriss = require('./ahrriss');
 
 var aloudContainer = document.getElementById('dlg-aloud');
 
@@ -12,26 +11,24 @@ var playlistContainer = document.getElementById('dlg-aloud-player'),
     trackElements,
     currentTrackNumber;
 
+var resp = ahrriss.apiResponse;
+
 if (playlistContainer) {
 
-  fetchival(api.root + 'playlist' + '?apikey=' + api.key).get().then(function(resp) {
-    console.info('/playlist content returned')
+  var rawPlaylist = resp && resp.length && resp[0].Playlist;
+  if (!rawPlaylist) { return; }
 
-    var rawPlaylist = resp && resp.length && resp[0].Songs;
-    if (!rawPlaylist) { return; }
-
-    var dlgPlaylist = rawPlaylist.map(function(song) {
-      return {
-        src: mediaPath + song.Album + '/' + 'Die Like Gentlemen' + ' - ' + song.Album + ' - ' + song.TrackNumber + ' - ' + song.Name + '.mp3',
-        title: song.Name,
-        album: song.Album
-      };
-    });
-
-    embedAudioPlaylist(dlgPlaylist, 350);
-
-    revealSection(aloudContainer);
+  var dlgPlaylist = rawPlaylist.map(function(song) {
+    return {
+      src: mediaPath + song.Album + '/' + 'Die Like Gentlemen' + ' - ' + song.Album + ' - ' + song.TrackNumber + ' - ' + song.Name + '.mp3',
+      title: song.Name,
+      album: song.Album
+    };
   });
+
+  embedAudioPlaylist(dlgPlaylist, 350);
+
+  ahrriss.revealSection(aloudContainer);
 }
 
 function embedAudioPlaylist(audioPlaylist, height, width) {
