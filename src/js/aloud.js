@@ -172,7 +172,7 @@ function initPlaylist() {
     }
 
     audioElement.addEventListener('ended', function(e) {
-      console.info('ended: currentTrackNumber = ' + currentTrackNumber)
+      // console.info('ended: currentTrackNumber = ' + currentTrackNumber)
 
       // play next track (if exists)
       if (currentTrackNumber < playlistLength) {

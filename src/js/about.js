@@ -55,6 +55,7 @@ function renderNextImage() {
 
 /** reveal next image; if next image isn't loaded, redirect to renderNextImage **/
 function galleryShift() {
+  // console.info('galleryShift')
   var nextGalleryIndex = currentGalleryIndex == galleryImageIds.length - 1 ? 0 : currentGalleryIndex + 1;
   // console.info('galleryShift: nextGalleryIndex = ' + nextGalleryIndex);
   var nextImage = document.getElementById(imagePrefix + nextGalleryIndex);

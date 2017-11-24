@@ -53,11 +53,12 @@ a {
 
 
 #dlg-header {
+  $loadingTransitionDuration: 0.75s;
+
   text-align: center;
 
   background-color: rgba($color-black, 0.35);
   border-bottom: 0.2em solid #000;
-  // padding: 2em 1em;
 
   padding-top: 1em;
   margin-bottom: 2em;
@@ -80,12 +81,26 @@ a {
     height: 130px;
     background-repeat: no-repeat;
     background-size: contain;
+    // loading animation styles
+    position: relative;
+    transition: all linear $loadingTransitionDuration;
   }
   .duellist-left {
     background-image: url("#{$pathImages}/duellist-left.png");
   }
   .duellist-right {
     background-image: url("#{$pathImages}/duellist-right.png");
+  }
+
+  &::after {
+    content: attr(data-msg);
+    position: absolute;
+    text-align: left;
+    white-space: nowrap;
+    transition: top linear $loadingTransitionDuration,  // move in sync with duellists
+                opacity linear 0.5s,  // fade away
+                left linear 0.1s 0.5s;  // move off-screen
+    opacity: 1.0;
   }
 }
 
@@ -247,9 +262,7 @@ section {
 
 
 #dlg-alive-video {
-  & > iframe {
-    // height: 300px;
-  }
+  margin-bottom: 2em;
 }
 
 
@@ -367,17 +380,85 @@ section {
 }
 
 
-@media (max-width: 1100px) {
+// large screen
+@media (min-width: 1100px) {
 
   #dlg-header {
+
+    .duellist-left,
+    .duellist-right {
+      top: 50vh;
+
+      body.loaded & { top: 0; }
+    }
+    .duellist-left {
+      left: 15em;
+
+      body.loaded & { left: 0; }
+    }
+    .duellist-right {
+      right: 15em;
+
+      body.loaded & { right: 0; }
+    }
+
+    &::after {
+      font-size: 1em;
+      width: 6em;
+      left: 50vw;
+      top: calc(50vh + 50px);
+      transform: translateX(-50%);
+
+      body.loaded & { opacity: 0; left: -100vw; }
+    }
+  }
+
+}
+
+
+@media (max-width: 1100px) {
+
+
+  #dlg-header {
+
     .band-name {
       font-size: 4em;
       vertical-align: 0.2em;
     }
+
+    $DuellistTop: 40vh;
+    $DuelllistOffset: 10em;
+    $DuellistSize: 75px;
+
     .duellist-left,
     .duellist-right {
-      width: 75px;
-      height: 75px;
+      top: $DuellistTop;
+      width: $DuellistSize;
+      height: $DuellistSize;
+
+      body.loaded & {
+        top: 0;
+      }
+    }
+    .duellist-left {
+      left: $DuelllistOffset;
+
+      body.loaded & { left: 0; }
+    }
+    .duellist-right {
+      right: $DuelllistOffset;
+
+      body.loaded & { right: 0; }
+    }
+
+    &::after {
+      font-size: 0.9em;
+      width: 5em;
+      left: 50vw;
+      top: calc(#{$DuellistTop} + 50px);
+      transform: translateX(-50%);
+
+      body.loaded & { opacity: 0; left: -100vw; }
     }
   }
 
@@ -405,17 +486,16 @@ section {
 @media (max-width: 750px) {
 
   #dlg-header {
-    .band-name {
-      // font-size: 4em;
-    }
+
     .duellist-left,
     .duellist-right {
-      display: none;
+      position: absolute;
+      margin-top: 1em;
+
+      body.loaded & { opacity: 0; }
     }
   }
 }
-
-
 
 @media (max-width: 600px) {
 
@@ -428,6 +508,25 @@ section {
 
     .band-name {
       font-size: 2.5em;
+    }
+
+    $DuellistTop: 40vh;
+    $DuelllistOffset: 5em;
+
+    .duellist-left,
+    .duellist-right {
+      top: $DuellistTop;
+    }
+    .duellist-left {
+      left: $DuelllistOffset;
+    }
+    .duellist-right {
+      right: $DuelllistOffset;
+    }
+
+    &::after {
+      width: 6em;
+      top: calc(#{$DuellistTop} + 50px);
     }
   }
 

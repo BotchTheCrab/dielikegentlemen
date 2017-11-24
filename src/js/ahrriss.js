@@ -2,16 +2,58 @@
 var fetchival = require('fetchival');
 var api = require('./api');
 
-var sections = ['dlg-about', 'dlg-aloud', 'dlg-alive', 'dlg-contact'];
+var sections = ['dlg-about', 'dlg-aloud', 'dlg-alive', 'dlg-contact'],
+    revealedSections = [],
+    queuedSections = [];
 
-var revealedSections = [];
-var queuedSections = [];
+var loadingMsgAttr,
+    loadingText = "Loading",
+    aposiopesis = " . . .",
+    loadingInterval;
 
-function revealSection(section){
+document.addEventListener('DOMContentLoaded', function() {
+
+  // loadingTicker();
+
+  loadingInterval = window.setInterval(loadingTicker, 500);
+
+  var contactContainer = document.getElementById('dlg-contact');
+
+  fetchival(api.root + 'about' + '?apikey=' + api.key).get().then(function(resp) {
+
+    module.exports = {
+      apiResponse: resp,
+      revealSection: revealSection
+    };
+
+    var about = require('./about');
+    var aloud = require('./aloud');
+    var alive = require('./alive');
+
+    revealSection(contactContainer);
+  });
+
+});
+
+
+function loadingTicker() {
+  aposiopesis = aposiopesis.length < 6 ? aposiopesis + " ." : "";
+  document.getElementById('dlg-header').dataset.msg = loadingText + aposiopesis;
+}
+
+function revealSection(section) {
   var sectionId = section.id;
   if (revealedSections.indexOf(sectionId) !== -1) {
     return;
   }
+
+  if (sectionId == 'dlg-about') {
+    document.body.classList.add('loaded');
+    // console.info('loaded class added');
+    window.clearInterval(loadingInterval);
+  }
+
+
 
   var sectionIndex = sections.indexOf(sectionId);
   var previousSectionId = sectionIndex > 0 ? sections[sectionIndex - 1] : null;
@@ -50,8 +92,7 @@ function revealSection(section){
   }
 };
 
-
-var _revealSection = function(sectionId) {
+function _revealSection(sectionId) {
   // console.info('_revealSection: sectionId = ' + sectionId);
   var section = document.getElementById(sectionId);
   if (!section) { return; }
@@ -67,24 +108,3 @@ var _revealSection = function(sectionId) {
 
   revealedSections.push(section.id)
 }
-
-
-
-
-document.addEventListener('DOMContentLoaded', function() {
-  var contactContainer = document.getElementById('dlg-contact');
-
-  fetchival(api.root + 'about' + '?apikey=' + api.key).get().then(function(resp) {
-    module.exports = {
-      apiResponse: resp,
-      revealSection: revealSection
-    };
-
-    var about = require('./about');
-    var aloud = require('./aloud');
-    var alive = require('./alive');
-
-    revealSection(contactContainer);
-  });
-
-});
