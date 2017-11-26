@@ -59,7 +59,6 @@ function renderNextImage() {
     // console.info({ imageSrc: imageSrc });
 
     var imageElement = document.createElement('img');
-    // var imageSrc = api.mediaRoot + galleryImageNames[nextGalleryIndex];
     imageElement.src = imageSrc;
     imageElement.id = imagePrefix + nextGalleryIndex;
     imageElement.addEventListener('load', function() {

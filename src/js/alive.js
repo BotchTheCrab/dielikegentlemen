@@ -1,14 +1,10 @@
 /****** GIG LISTINGS ******/
 
 var ahrriss = require('./ahrriss');
-// var fetchival = require('fetchival');
-// var api = require('./api');
 
 var aliveContainer = document.getElementById('dlg-alive');
 
 var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-// var resp = ahrriss.apiResponse;
 
 var videoContainer = document.getElementById('dlg-alive-video');
 var gigContainer = document.getElementById('gig-container');
