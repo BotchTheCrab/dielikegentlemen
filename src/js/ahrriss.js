@@ -1,6 +1,13 @@
-
-var fetchival = require('fetchival');
-var api = require('./api');
+// Initialize Firebase
+var firebaseConfig = {
+  apiKey: "AIzaSyB4KLSd8Dsrero40lcsZh35Ok9VRnQdriY",
+  authDomain: "die-like-gentlemen.firebaseapp.com",
+  databaseURL: "https://die-like-gentlemen.firebaseio.com",
+  projectId: "die-like-gentlemen",
+  storageBucket: "gs://die-like-gentlemen.appspot.com",
+  messagingSenderId: "1090916658810"
+};
+firebase.initializeApp(firebaseConfig);
 
 var sections = ['dlg-about', 'dlg-aloud', 'dlg-alive', 'dlg-contact'],
     revealedSections = [],
@@ -14,25 +21,22 @@ var loadingMsgAttr,
 document.addEventListener('DOMContentLoaded', function() {
 
   // loadingTicker();
-
+  
   loadingInterval = window.setInterval(loadingTicker, 500);
 
   var contactContainer = document.getElementById('dlg-contact');
 
-  fetchival(api.root + 'about' + '?apikey=' + api.key).get().then(function(resp) {
+  module.exports = {
+    firebaseDatabase: firebase.database(),
+    firebaseStorage: firebase.storage(),
+    revealSection: revealSection
+  };
 
-    module.exports = {
-      apiResponse: resp,
-      revealSection: revealSection
-    };
+  var about = require('./about');
+  var aloud = require('./aloud');
+  var alive = require('./alive');
 
-    var about = require('./about');
-    var aloud = require('./aloud');
-    var alive = require('./alive');
-
-    revealSection(contactContainer);
-  });
-
+  revealSection(contactContainer);
 });
 
 
@@ -52,8 +56,6 @@ function revealSection(section) {
     // console.info('loaded class added');
     window.clearInterval(loadingInterval);
   }
-
-
 
   var sectionIndex = sections.indexOf(sectionId);
   var previousSectionId = sectionIndex > 0 ? sections[sectionIndex - 1] : null;
@@ -100,7 +102,7 @@ function _revealSection(sectionId) {
   section.classList.add('loaded');
   window.setTimeout(function(){
     section.classList.add('revealed');
-  }, 250);
+  }, 100);
 
   queuedSections = queuedSections.filter(function(queuedSectionId) {
     return queuedSectionId !== sectionId;

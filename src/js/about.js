@@ -1,36 +1,42 @@
 /****** IMAGE SLIDESHOW & BIO ******/
 
 var ahrriss = require('./ahrriss');
-var api = require('./api');
 
 var aboutContainer = document.getElementById('dlg-about');
 
 var galleryContainer = document.getElementById('dlg-about-images'),
-    galleryImageIds = [],
+    galleryImageNames = [],
     durationMs = 9000,
     currentGalleryIndex = -1,
     imagePrefix = 'dlg-image-';
 
 var bioContainer = document.getElementById('dlg-about-bio');
 
-var resp = ahrriss.apiResponse;
-
 // initialize gallery
 if (galleryContainer) {
-  var slideshow = resp && resp.length && resp[0].Gallery;
-  if (!slideshow) { return; }
-  galleryImageIds = slideshow.map(function(image) {
-    return image.Image[0];
+  var Gallery = ahrriss.firebaseDatabase.ref('Gallery');
+  Gallery.on('value', function(resp) {
+    var galleryImages = resp.val();
+    galleryImageNames = galleryImages.map(function(galleryImage) {
+      return galleryImage.imageName;
+    });
+    // console.info('galleryImageNames ...')
+    // console.info(galleryImageNames);
+    renderNextImage();
   });
-  renderNextImage();
 }
 
 // render bio
 if (bioContainer) {
-  var bio = resp[0].Description;
-  if (bioContainer && bio) {
-    bioContainer.innerHTML = bio;
-  }
+  var Description = ahrriss.firebaseDatabase.ref('Description');
+  Description.on('value', function(resp) {
+    // console.info(resp.val())
+
+    var bio = resp.val();
+    if (bio) {
+      bioContainer.innerHTML = bio;
+    }
+  });
 }
 
 
@@ -38,25 +44,39 @@ if (bioContainer) {
 function renderNextImage() {
   var nextGalleryIndex = currentGalleryIndex + 1;
   // console.info('renderNextImage: nextGalleryIndex = ' + nextGalleryIndex);
-  if (!galleryImageIds[nextGalleryIndex]) { return; }
+  if (!galleryImageNames[nextGalleryIndex]) { return; }
 
-  var imageElement = document.createElement('img');
-  var imageSrc = api.mediaRoot + galleryImageIds[nextGalleryIndex];
-  imageElement.src = imageSrc;
-  imageElement.id = imagePrefix + nextGalleryIndex;
-  imageElement.addEventListener('load', function() {
-    galleryShift();
+  var galleryImageName = galleryImageNames[nextGalleryIndex];
+
+  // console.info('renderNextImage ... ')
+  // console.info({
+  //   nextGalleryIndex: nextGalleryIndex,
+  //   galleryImageName: galleryImageName
+  // });
+
+  var storageRef = ahrriss.firebaseStorage.ref();
+  storageRef.child('gallery/' + galleryImageName).getDownloadURL().then(function(imageSrc){
+    // console.info({ imageSrc: imageSrc });
+
+    var imageElement = document.createElement('img');
+    // var imageSrc = api.mediaRoot + galleryImageNames[nextGalleryIndex];
+    imageElement.src = imageSrc;
+    imageElement.id = imagePrefix + nextGalleryIndex;
+    imageElement.addEventListener('load', function() {
+      galleryShift();
+    });
+    imageElement.addEventListener('click', function() {
+      window.open(imageSrc);
+    });
+    galleryContainer.appendChild(imageElement);
+
   });
-  imageElement.addEventListener('click', function() {
-    window.open(imageSrc);
-  });
-  galleryContainer.appendChild(imageElement);
 }
 
 /** reveal next image; if next image isn't loaded, redirect to renderNextImage **/
 function galleryShift() {
   // console.info('galleryShift')
-  var nextGalleryIndex = currentGalleryIndex == galleryImageIds.length - 1 ? 0 : currentGalleryIndex + 1;
+  var nextGalleryIndex = currentGalleryIndex == galleryImageNames.length - 1 ? 0 : currentGalleryIndex + 1;
   // console.info('galleryShift: nextGalleryIndex = ' + nextGalleryIndex);
   var nextImage = document.getElementById(imagePrefix + nextGalleryIndex);
 

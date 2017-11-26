@@ -1,32 +1,40 @@
 /****** GIG LISTINGS ******/
 
 var ahrriss = require('./ahrriss');
-var fetchival = require('fetchival');
-var api = require('./api');
+// var fetchival = require('fetchival');
+// var api = require('./api');
 
 var aliveContainer = document.getElementById('dlg-alive');
 
 var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-var resp = ahrriss.apiResponse;
+// var resp = ahrriss.apiResponse;
 
 var videoContainer = document.getElementById('dlg-alive-video');
 var gigContainer = document.getElementById('gig-container');
 
 if (videoContainer) {
-  var videoLink = resp[0].VideoLink;
-  if (videoLink) {
-    videoInit(videoLink);
-  }
+  var VideoLink = ahrriss.firebaseDatabase.ref('VideoLink');
+  VideoLink.on('value', function(resp) {
+    // console.info(resp.val())
+
+    var videoLink = resp.val();
+    if (videoLink) {
+      videoInit(videoLink);
+    }
+  });
 }
 
 if (gigContainer) {
+  var Gigs = ahrriss.firebaseDatabase.ref('Gigs');
+  Gigs.on('value', function(resp) {
+    var allGigs = resp.val();
+    // console.info({ allGigs: allGigs })
 
-  fetchival(api.root + 'gigs' + '?apikey=' + api.key).get().then(function(resp) {
     // filter out past gigs
     var today = new Date();
     today.setHours(0, 0, 0);
-    var upcomingGigs = resp.filter(function(gig) {
+    var upcomingGigs = allGigs.filter(function(gig) {
       var gigDate = new Date(gig.Date);
       return gigDate >= today;
     });
@@ -35,6 +43,7 @@ if (gigContainer) {
     upcomingGigs.sort(function(a, b) {
       return a.Date > b.Date;
     });
+    // console.info({ upcomingGigs: upcomingGigs })
 
     // render upcoming gigs
     for (var x = 0; x < upcomingGigs.length; x++) {

@@ -11,14 +11,14 @@ var paths = {
 		root: 'src/js/ahrriss.js',
 		sources: 'src/js/*.js',
 		destination: {
-			folder: 'js',
+			folder: 'deploy/js',
 			name: 'ahrriss.js'
 		}
 	},
 	sass: {
 		root: 'src/sass/cerberus.scss',
 		sources:  'src/sass/**/*.scss',
-		destination: 'css'
+		destination: 'deploy/css'
 	}
 };
 
@@ -63,4 +63,4 @@ gulp.task('JavaScript-Watch', function() {
 
 gulp.task('build', ['Sass-Compile', 'JavaScript-Bundle']);
 
-gulp.task('default', ['Sass-Watch', 'JavaScript-Watch']);
+gulp.task('default', ['build', 'Sass-Watch', 'JavaScript-Watch']);
