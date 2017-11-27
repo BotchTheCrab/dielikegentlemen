@@ -485,6 +485,10 @@ section {
 
 @media (max-width: 750px) {
 
+  body {
+    background-image: url("#{$pathImages}/wallpaper-condemned-8bit-3pct-small.png");
+  }
+
   #dlg-header {
 
     .duellist-left,
