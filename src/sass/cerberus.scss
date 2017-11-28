@@ -34,6 +34,7 @@ body {
   background-color: $colorBackground;
   background-image: url("#{$pathImages}/wallpaper-condemned-8bit-3pct.png");
   background-position: top center;
+  background-attachment: fixed;
 
   font-family: 'Packard Antique';
   font-size: 13pt;
