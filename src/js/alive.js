@@ -64,9 +64,10 @@ if (gigContainer) {
 
 }
 
-function formatDate(date) {
-  var oDate = new Date(date);
-  return monthNames[oDate.getMonth()].substring(0,3) + ' ' + oDate.getDate();
+function formatDate(timestamp) {
+  var month = Number(timestamp.substring(5,7));
+  var date = Number(timestamp.substring(8,10));
+  return monthNames[month - 1].substring(0,3) + ' ' + date;
 }
 
 function formatOtherBands(sBands) {
