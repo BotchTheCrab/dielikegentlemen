@@ -1,6 +1,7 @@
 /****** AUDIO PLAYLIST ******/
 
 var ahrriss = require('./ahrriss');
+var lie = require('lie/polyfill');
 
 var aloudContainer = document.getElementById('dlg-aloud');
 
@@ -9,7 +10,8 @@ var playlistContainer = document.getElementById('dlg-aloud-player'),
     audioElement,
     playlistElement,
     trackElements,
-    currentTrackNumber;
+    currentTrackNumber,
+    dlgPlaylist = [];
 
 if (playlistContainer) {
 
@@ -25,22 +27,57 @@ if (playlistContainer) {
 
       if (!rawPlaylist) { return; }
 
-      var dlgPlaylist = rawPlaylist.map(function(playlistSong) {
-        for (var x = 0; x < songList.length; x++) {
+      var dlgPlaylistPromiseArray = [];
+
+      for (var i = 0; i < rawPlaylist.length; i++) {    // looping through playlist array of song titles
+        var playlistIndex = i;
+        var playlistSong = rawPlaylist[playlistIndex];
+
+        for (var x = 0; x < songList.length; x++) {     // looping through song collection to match to playlist title
           if (songList[x].Name == playlistSong.Name) {
             var song = songList[x];
-            return {
-              src: mediaPath + song.Album + '/' + 'Die Like Gentlemen' + ' - ' + song.Album + ' - ' + song.TrackNumber + ' - ' + song.Name + '.mp3',
-              title: song.Name,
-              album: song.Album
-            };
+            var storagePath = 'discography/' + song.Album + '/' + 'Die Like Gentlemen' + ' - ' + song.Album + ' - ' + song.TrackNumber + ' - ' + song.Name + '.mp3';
+            // console.info(storagePath);
+
+            var storageRef = ahrriss.firebaseStorage.ref();
+            var storageChild = storageRef.child(storagePath);
+
+            // create collection of promises that fetch the song URLs
+            dlgPlaylistPromiseArray.push(
+              storageChild.getDownloadURL()
+              .then(
+                function(songSrc) {
+                  console.info({ this: this, songSrc: songSrc });
+
+                  // create final playlist with all necessary values at correct index
+                  dlgPlaylist[this.playlistIndex] = {
+                    src: songSrc,
+                    title: this.songName,
+                    album: this.songAlbum
+                  };
+
+                }.bind({    // fun!
+                  playlistIndex: playlistIndex,
+                  songName: song.Name,
+                  songAlbum: song.Album
+                })
+              )
+            );
+
+            break;
           }
         }
+      }
+
+      // now that all playlist song URLs have been fetched, embed the audio and reveal the section
+      Promise.all(dlgPlaylistPromiseArray).then(function() {
+        console.info({ arguments: arguments })
+        console.info({ dlgPlaylist: dlgPlaylist })
+
+        embedAudioPlaylist(dlgPlaylist, 350);
+
+        ahrriss.revealSection(aloudContainer);
       });
-
-      embedAudioPlaylist(dlgPlaylist, 350);
-
-      ahrriss.revealSection(aloudContainer);
 
     });
 
