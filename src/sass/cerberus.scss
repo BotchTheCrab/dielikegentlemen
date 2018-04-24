@@ -366,14 +366,14 @@ main {
   padding: 1.5em;
   margin-top: 3em;
 
-  & > a {
-    font-size: 1.25em;
-  }
+  // & > a {
+  //   font-size: 1.25em;
+  // }
 }
 
 
 #dlg-footer-icons {
-  margin-top: 1.5em;
+  margin-bottom: 1em;
 
   img {
     position: relative;
@@ -549,6 +549,16 @@ main {
   #dlg-alive-video {
     & > iframe {
       height: 180px;
+    }
+  }
+
+  #releases-container {
+    & > div {
+      width: 40%;
+
+      img {
+        width: 100%;
+      }
     }
   }
 
