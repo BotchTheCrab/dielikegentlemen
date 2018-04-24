@@ -56,6 +56,7 @@ if (gigContainer) {
           '<div class="gig-details">' +
             '<div class="gig-city">' + gig.City_State + '</div>' +
             '<div class="gig-venue">' + gig.Venue + '</div>' +
+            (gig.Notes ? '<div class="gig-notes">' + gig.Notes + '</div>' : '') +
             (gig.OtherBands ? '<div class="gig-bands">with ' + formatOtherBands(gig.OtherBands) + '</div>' : '') +
           '</div>' +
           '<div class="gig-link">' + (gig.Link ? '<a href="' + gig.Link + '" target="_blank">details</a>' : '') + '</div>' +
