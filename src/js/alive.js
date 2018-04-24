@@ -27,11 +27,16 @@ if (gigContainer) {
     var allGigs = resp.val();
     // console.info({ allGigs: allGigs })
 
+    var _zeroPad = function(n) {
+      return n < 10 ? "0" + n : String(n);
+    };
+
     // filter out past gigs
+    // format: YYYY-MM-DD ...
     var today = new Date();
-    today.setHours(0, 0, 0);
+    today = today.getFullYear() + "-" + _zeroPad(today.getMonth() + 1) + "-" + _zeroPad(today.getDate());
     var upcomingGigs = allGigs.filter(function(gig) {
-      var gigDate = new Date(gig.Date);
+      var gigDate = gig.Date.substring(0,10);
       return gigDate >= today;
     });
 
