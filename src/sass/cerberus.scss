@@ -541,16 +541,22 @@ main {
 
   .section, .section.column-left, .section.column-right {
     width: auto;
-    max-width: auto;
-    min-width: auto;
+    // max-width: auto;
+    // min-width: auto;
+    max-width: 100%;
+    min-width: 100%;
     padding: 0 1em;
   }
 
-  #dlg-alive-video {
-    & > iframe {
-      height: 180px;
-    }
+  #dlg-contact {
+    min-width: auto;
   }
+
+  // #dlg-alive-video {
+  //   & > iframe {
+  //     height: 180px;
+  //   }
+  // }
 
   #releases-container {
     & > div {
