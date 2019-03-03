@@ -42,7 +42,7 @@ if (gigContainer) {
 
     // sort by date
     upcomingGigs.sort(function(a, b) {
-      return a.Date > b.Date;
+      return a.Date > b.Date ? 1 : -1;
     });
     // console.info({ upcomingGigs: upcomingGigs })
 
