@@ -46,6 +46,8 @@ if (gigContainer) {
     });
     // console.info({ upcomingGigs: upcomingGigs })
 
+    gigContainer.innerHTML = '';
+
     // render upcoming gigs
     for (var x = 0; x < upcomingGigs.length; x++) {
       var gig = upcomingGigs[x];
