@@ -10,14 +10,12 @@ var videoContainer = document.getElementById('dlg-alive-video');
 var gigContainer = document.getElementById('gig-container');
 
 if (videoContainer) {
-  var VideoLink = ahrriss.firebaseDatabase.ref('VideoLink');
-  VideoLink.on('value', function(resp) {
-    // console.info(resp.val())
-
-    var videoLink = resp.val();
-    if (videoLink) {
+  var VideoLinks = ahrriss.firebaseDatabase.ref('VideoLinks');
+  VideoLinks.on('value', function(resp) {
+    var videoLinks = resp.val();
+    videoLinks.forEach(function(videoLink, index) {
       videoInit(videoLink);
-    }
+    });
   });
 }
 
@@ -98,21 +96,27 @@ function formatOtherBands(sBands) {
 
 
 function videoInit(videoLink) {
-  // videoContainer.innerHTML = '<iframe src="' + videoLink + '" frameborder="0" allowfullscreen></iframe>';
+  // NOTE: use embed version of YouTube link in DB:
+  // example: https://www.youtube.com/embed/BIHY9NKm6JQ?start=4
 
-  // https://www.youtube.com/embed/BIHY9NKm6JQ?start=4
+  if (!videoLink || typeof videoLink !== 'string') { return; }
 
   var videoParse = videoLink.match(/embed\/([\d\w]+)(\?start\=)*(\d*)/);
   if (videoParse.length > 1) {
     var embedId = videoParse[1];
     var startPos = videoParse[3] || 0;
 
-    var div = document.createElement("div");
+    var mediaContainer = document.createElement('div');
+    mediaContainer.setAttribute('class', 'media-container youtube-player');
+
+    var div = document.createElement('div');
     div.setAttribute("data-id", embedId);
     if (startPos) { div.setAttribute("data-start", startPos); }
     div.innerHTML = labnolThumb(embedId);
     div.onclick = labnolIframe;
-    videoContainer.appendChild(div);
+
+    mediaContainer.appendChild(div);
+    videoContainer.appendChild(mediaContainer)
   }
 }
 
