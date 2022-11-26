@@ -61,6 +61,11 @@ gulp.task('JavaScript-Watch', function() {
 	gulp.watch(paths.scripts.sources, ['JavaScript-Bundle']);
 });
 
+
+
+
+////// WATCH and BUILD
+
 gulp.task('build', ['Sass-Compile', 'JavaScript-Bundle']);
 
 gulp.task('default', ['build', 'Sass-Watch', 'JavaScript-Watch']);
