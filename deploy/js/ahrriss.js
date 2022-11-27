@@ -1,1 +1,349 @@
-!function e(t,n,a){function r(o,l){if(!n[o]){if(!t[o]){var s="function"==typeof require&&require;if(!l&&s)return s(o,!0);if(i)return i(o,!0);var u=new Error("Cannot find module '"+o+"'");throw u.code="MODULE_NOT_FOUND",u}var c=n[o]={exports:{}};t[o][0].call(c.exports,function(e){var n=t[o][1][e];return r(n||e)},c,c.exports,e,t,n,a)}return n[o].exports}for(var i="function"==typeof require&&require,o=0;o<a.length;o++)r(a[o]);return r}({1:[function(e,t,n){(function(e){"use strict";var n,a,r=e.MutationObserver||e.WebKitMutationObserver;if(r){var i=0,o=new r(c),l=e.document.createTextNode("");o.observe(l,{characterData:!0}),n=function(){l.data=i=++i%2}}else if(e.setImmediate||void 0===e.MessageChannel)n="document"in e&&"onreadystatechange"in e.document.createElement("script")?function(){var t=e.document.createElement("script");t.onreadystatechange=function(){c(),t.onreadystatechange=null,t.parentNode.removeChild(t),t=null},e.document.documentElement.appendChild(t)}:function(){setTimeout(c,0)};else{var s=new e.MessageChannel;s.port1.onmessage=c,n=function(){s.port2.postMessage(0)}}var u=[];function c(){var e,t;a=!0;for(var n=u.length;n;){for(t=u,u=[],e=-1;++e<n;)t[e]();n=u.length}a=!1}t.exports=function(e){1!==u.push(e)||a||n()}}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{}],2:[function(e,t,n){"use strict";var a=e("immediate");function r(){}var i={},o=["REJECTED"],l=["FULFILLED"],s=["PENDING"];function u(e){if("function"!=typeof e)throw new TypeError("resolver must be a function");this.state=s,this.queue=[],this.outcome=void 0,e!==r&&m(this,e)}function c(e,t,n){this.promise=e,"function"==typeof t&&(this.onFulfilled=t,this.callFulfilled=this.otherCallFulfilled),"function"==typeof n&&(this.onRejected=n,this.callRejected=this.otherCallRejected)}function d(e,t,n){a(function(){var a;try{a=t(n)}catch(t){return i.reject(e,t)}a===e?i.reject(e,new TypeError("Cannot resolve promise with itself")):i.resolve(e,a)})}function f(e){var t=e&&e.then;if(e&&("object"==typeof e||"function"==typeof e)&&"function"==typeof t)return function(){t.apply(e,arguments)}}function m(e,t){var n=!1;function a(t){n||(n=!0,i.reject(e,t))}function r(t){n||(n=!0,i.resolve(e,t))}var o=v(function(){t(r,a)});"error"===o.status&&a(o.value)}function v(e,t){var n={};try{n.value=e(t),n.status="success"}catch(e){n.status="error",n.value=e}return n}t.exports=u,u.prototype.catch=function(e){return this.then(null,e)},u.prototype.then=function(e,t){if("function"!=typeof e&&this.state===l||"function"!=typeof t&&this.state===o)return this;var n=new this.constructor(r);this.state!==s?d(n,this.state===l?e:t,this.outcome):this.queue.push(new c(n,e,t));return n},c.prototype.callFulfilled=function(e){i.resolve(this.promise,e)},c.prototype.otherCallFulfilled=function(e){d(this.promise,this.onFulfilled,e)},c.prototype.callRejected=function(e){i.reject(this.promise,e)},c.prototype.otherCallRejected=function(e){d(this.promise,this.onRejected,e)},i.resolve=function(e,t){var n=v(f,t);if("error"===n.status)return i.reject(e,n.value);var a=n.value;if(a)m(e,a);else{e.state=l,e.outcome=t;for(var r=-1,o=e.queue.length;++r<o;)e.queue[r].callFulfilled(t)}return e},i.reject=function(e,t){e.state=o,e.outcome=t;for(var n=-1,a=e.queue.length;++n<a;)e.queue[n].callRejected(t);return e},u.resolve=function(e){if(e instanceof this)return e;return i.resolve(new this(r),e)},u.reject=function(e){var t=new this(r);return i.reject(t,e)},u.all=function(e){var t=this;if("[object Array]"!==Object.prototype.toString.call(e))return this.reject(new TypeError("must be an array"));var n=e.length,a=!1;if(!n)return this.resolve([]);var o=new Array(n),l=0,s=-1,u=new this(r);for(;++s<n;)c(e[s],s);return u;function c(e,r){t.resolve(e).then(function(e){o[r]=e,++l!==n||a||(a=!0,i.resolve(u,o))},function(e){a||(a=!0,i.reject(u,e))})}},u.race=function(e){var t=this;if("[object Array]"!==Object.prototype.toString.call(e))return this.reject(new TypeError("must be an array"));var n=e.length,a=!1;if(!n)return this.resolve([]);var o=-1,l=new this(r);for(;++o<n;)s=e[o],t.resolve(s).then(function(e){a||(a=!0,i.resolve(l,e))},function(e){a||(a=!0,i.reject(l,e))});var s;return l}},{immediate:1}],3:[function(e,t,n){(function(t){"use strict";"function"!=typeof t.Promise&&(t.Promise=e("./lib"))}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./lib":2}],4:[function(e,t,n){var a=e("./ahrriss"),r=document.getElementById("dlg-about"),i=document.getElementById("dlg-about-images"),o=[],l=9e3,s=-1,u="dlg-image-",c=document.getElementById("dlg-about-bio");i&&a.firebaseDatabase.ref("Gallery").on("value",function(e){var t=e.val();o=t.map(function(e){return e.imageName}),d()});c&&a.firebaseDatabase.ref("Description").on("value",function(e){var t=e.val();t&&(c.innerHTML=t)});function d(){var e=s+1;if(o[e]){var t=o[e];a.firebaseStorage.ref().child("gallery/"+t).getDownloadURL().then(function(t){var n=document.createElement("img");n.src=t,n.id=u+e,n.addEventListener("load",function(){f()}),n.addEventListener("click",function(){window.open(t)}),i.appendChild(n)})}}function f(){var e=s==o.length-1?0:s+1,t=document.getElementById(u+e);if(t){var n=document.getElementById(u+s);n&&n.classList.remove("active"),t.classList.add("active"),s=Number(e),a.revealSection(r),window.setTimeout(f,l)}else d()}},{"./ahrriss":5}],5:[function(e,t,n){firebase.initializeApp({apiKey:"AIzaSyB4KLSd8Dsrero40lcsZh35Ok9VRnQdriY",authDomain:"die-like-gentlemen.firebaseapp.com",databaseURL:"https://die-like-gentlemen.firebaseio.com",projectId:"die-like-gentlemen",storageBucket:"gs://die-like-gentlemen.appspot.com",messagingSenderId:"1090916658810"});var a,r=["dlg-about","dlg-aloud","dlg-alive","dlg-contact"],i=[],o=[],l="Loading",s=" . . .";function u(){s=s.length<6?s+" .":"",document.getElementById("dlg-header").dataset.msg=l+s}function c(e){var t=e.id;if(-1===i.indexOf(t)){"dlg-about"==t&&(document.body.classList.add("loaded"),window.clearInterval(a));var n=r.indexOf(t),l=n>0?r[n-1]:null;l?-1!==i.indexOf(l)?d(t):-1!==o.indexOf(l)?o.push(t):o.indexOf(t)&&o.push(t):d(t);var s=n+1<r.length?r[n+1]:null;s&&-1!==o.indexOf(s)&&c(document.getElementById(s))}}function d(e){var t=document.getElementById(e);t&&(t.classList.add("loaded"),window.setTimeout(function(){t.classList.add("revealed")},100),o=o.filter(function(t){return t!==e}),i.push(t.id))}document.addEventListener("DOMContentLoaded",function(){a=window.setInterval(u,500);var n=document.getElementById("dlg-contact");t.exports={firebaseDatabase:firebase.database(),firebaseStorage:firebase.storage(),revealSection:c};e("./about"),e("./aloud"),e("./alive");c(n)})},{"./about":4,"./alive":6,"./aloud":7}],6:[function(e,t,n){var a=e("./ahrriss"),r=document.getElementById("dlg-alive"),i=["January","February","March","April","May","June","July","August","September","October","November","December"],o=document.getElementById("dlg-alive-video"),l=document.getElementById("gig-container");o&&a.firebaseDatabase.ref("VideoLinks").on("value",function(e){e.val().forEach(function(e,t){!function(e){if(!e||"string"!=typeof e)return;var t=e.match(/embed\/([\d\w]+)(\?start\=)*(\d*)/);if(t.length>1){var n=t[1],a=t[3]||0,r=document.createElement("div");r.setAttribute("class","media-container youtube-player");var i=document.createElement("div");i.setAttribute("data-id",n),a&&i.setAttribute("data-start",a),i.innerHTML='<img src="https://i.ytimg.com/vi/ID/hqdefault.jpg">'.replace("ID",n)+'<div class="play"></div>',i.onclick=u,r.appendChild(i),o.appendChild(r)}}(e)})});l&&a.firebaseDatabase.ref("Gigs").on("value",function(e){var t=e.val(),n=function(e){return e<10?"0"+e:String(e)},o=new Date;o=o.getFullYear()+"-"+n(o.getMonth()+1)+"-"+n(o.getDate());var u,c,d,f=t.filter(function(e){return e.Date.substring(0,10)>=o});f.sort(function(e,t){return e.Date>t.Date?1:-1}),l.innerHTML="";for(var m=0;m<f.length;m++){var v=f[m],p='<div class="gig"><div class="gig-date">'+(u=v.Date,void 0,void 0,c=Number(u.substring(5,7)),d=Number(u.substring(8,10)),i[c-1].substring(0,3)+" "+d)+'</div><div class="gig-details"><div class="gig-city">'+v.City_State+'</div><div class="gig-venue">'+v.Venue+"</div>"+(v.Notes?'<div class="gig-notes">'+v.Notes+"</div>":"")+(v.OtherBands?'<div class="gig-bands">with '+s(v.OtherBands)+"</div>":"")+'</div><div class="gig-link">'+(v.Link?'<a href="'+v.Link+'" target="_blank">details</a>':"")+"</div></div>";l.innerHTML+=p}a.revealSection(r)});function s(e){if(e){for(var t=e.split(", "),n=0;n<t.length;n++)t[n]="<span>"+t[n].trim()+"</span>";return t.join(", ")}}function u(){var e=document.createElement("iframe"),t="https://www.youtube.com/embed/ID?autoplay=1",n=this.dataset.id;t=t.replace("ID",n);var a=this.dataset.start;a&&(t+="&start="+a),e.setAttribute("src",t),e.setAttribute("frameborder","0"),e.setAttribute("allowfullscreen","1"),this.parentNode.replaceChild(e,this)}},{"./ahrriss":5}],7:[function(e,t,n){var a,r,i,o,l=e("./ahrriss"),s=(e("lie/polyfill"),document.getElementById("dlg-aloud")),u=document.getElementById("dlg-aloud-player"),c=[];u&&l.firebaseDatabase.ref("Songs").on("value",function(e){var t=e.val();l.firebaseDatabase.ref("Playlist").on("value",function(e){var n=e.val();if(n){for(var m=[],v=0;v<n.length;v++)for(var p=v,h=n[p],g=0;g<t.length;g++)if(t[g].Name==h.Name){var b=t[g],y="discography/"+b.Album+"/Die Like Gentlemen - "+b.Album+" - "+b.TrackNumber+" - "+b.Name+".mp3",w=l.firebaseStorage.ref().child(y);m.push(w.getDownloadURL().then(function(e){console.info({this:this,songSrc:e}),c[this.playlistIndex]={src:e,title:this.songName,album:this.songAlbum}}.bind({playlistIndex:p,songName:b.Name,songAlbum:b.Album})));break}Promise.all(m).then(function(){console.info({arguments:arguments}),console.info({dlgPlaylist:c}),function(e,t,n){if(!u)return;var l=document.createElement("audio");if(l.play){l.src=e[0].src,l.controls="controls",l.controlsList="nodownload",l.preload="none",u.appendChild(l);var s=document.createElement("ol");s.className="media-playlist";for(var c=0;c<e.length;c++){var m=document.createElement("li");0===c&&(m.className="active");var v=document.createElement("a");if(v.href=e[c].src,e[c].title){var p=document.createElement("span");p.className="media-title",p.appendChild(document.createTextNode(e[c].title)),v.appendChild(p)}if(e[c].album){var h=document.createElement("span");h.className="media-album",h.appendChild(document.createTextNode(e[c].album)),v.appendChild(h)}m.appendChild(v),s.appendChild(m)}u.appendChild(l),u.appendChild(s),function(){if(!u)return;a=u.getElementsByTagName("audio")[0],r=u.getElementsByClassName("media-playlist")[0];var e=(i=r.getElementsByTagName("a")).length;o=1,a.volume=.1;for(var t=0;t<i.length;t++)i[t].setAttribute("track",t+1),i[t].addEventListener("click",function(e){e.preventDefault(),o=this.getAttribute("track"),f(this)});a.addEventListener("ended",function(t){o<e?f(i[++o-1]):d(i[(o=1)-1])})}(),l.volume=1}else{var g="/post_tunes/player_mp3_multi.swf",b=t||"100",y=n||"300",w="transparent",E="application/x-shockwave-flash",A=e.map(function(e){return e.src}).join("|"),C=e.map(function(e){return'"'+e.title+'"'+(e.artist?" - "+e.artist:"")}).join("|"),D={mp3:encodeURI(A),title:C,width:y,height:b,showstop:1,showvolume:0,bgcolor1:"666666",bgcolor2:"dddddd",showloading:"always"},j=[];for(var L in D)j.push(L+"="+D[L]);var N=j.join("&"),I=document.createElement("object");I.setAttribute("data",g),I.setAttribute("type",E),I.setAttribute("width",y),I.setAttribute("height",b);var B=document.createElement("param");B.setAttribute("name","movie"),B.setAttribute("value",g),I.appendChild(B);var k=document.createElement("param");k.setAttribute("name","wmode"),k.setAttribute("value",w),I.appendChild(k);var x=document.createElement("param");x.setAttribute("name","FlashVars"),x.setAttribute("value",N),I.appendChild(x);var T=document.createElement("embed");T.setAttribute("flashvars",N),T.setAttribute("src",g),T.setAttribute("type",E),T.setAttribute("wmode",w),I.setAttribute("width",y),I.setAttribute("height",b),I.appendChild(T),u.appendChild(I)}}(c,350),l.revealSection(s)})}})});function d(e){a.src=e.getAttribute("href");e.parentElement;for(var t=0;t<i.length;t++)i[t]==e?e.parentElement.classList.add("active"):i[t].parentElement.classList.remove("active");a.load()}function f(e){d(e),a.play()}},{"./ahrriss":5,"lie/polyfill":3}]},{},[5]);
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function (global){
+'use strict';
+var Mutation = global.MutationObserver || global.WebKitMutationObserver;
+
+var scheduleDrain;
+
+{
+  if (Mutation) {
+    var called = 0;
+    var observer = new Mutation(nextTick);
+    var element = global.document.createTextNode('');
+    observer.observe(element, {
+      characterData: true
+    });
+    scheduleDrain = function () {
+      element.data = (called = ++called % 2);
+    };
+  } else if (!global.setImmediate && typeof global.MessageChannel !== 'undefined') {
+    var channel = new global.MessageChannel();
+    channel.port1.onmessage = nextTick;
+    scheduleDrain = function () {
+      channel.port2.postMessage(0);
+    };
+  } else if ('document' in global && 'onreadystatechange' in global.document.createElement('script')) {
+    scheduleDrain = function () {
+
+      // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+      // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+      var scriptEl = global.document.createElement('script');
+      scriptEl.onreadystatechange = function () {
+        nextTick();
+
+        scriptEl.onreadystatechange = null;
+        scriptEl.parentNode.removeChild(scriptEl);
+        scriptEl = null;
+      };
+      global.document.documentElement.appendChild(scriptEl);
+    };
+  } else {
+    scheduleDrain = function () {
+      setTimeout(nextTick, 0);
+    };
+  }
+}
+
+var draining;
+var queue = [];
+//named nextTick for less confusing stack traces
+function nextTick() {
+  draining = true;
+  var i, oldQueue;
+  var len = queue.length;
+  while (len) {
+    oldQueue = queue;
+    queue = [];
+    i = -1;
+    while (++i < len) {
+      oldQueue[i]();
+    }
+    len = queue.length;
+  }
+  draining = false;
+}
+
+module.exports = immediate;
+function immediate(task) {
+  if (queue.push(task) === 1 && !draining) {
+    scheduleDrain();
+  }
+}
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],2:[function(require,module,exports){
+'use strict';
+var immediate = require('immediate');
+
+/* istanbul ignore next */
+function INTERNAL() {}
+
+var handlers = {};
+
+var REJECTED = ['REJECTED'];
+var FULFILLED = ['FULFILLED'];
+var PENDING = ['PENDING'];
+
+module.exports = Promise;
+
+function Promise(resolver) {
+  if (typeof resolver !== 'function') {
+    throw new TypeError('resolver must be a function');
+  }
+  this.state = PENDING;
+  this.queue = [];
+  this.outcome = void 0;
+  if (resolver !== INTERNAL) {
+    safelyResolveThenable(this, resolver);
+  }
+}
+
+Promise.prototype["catch"] = function (onRejected) {
+  return this.then(null, onRejected);
+};
+Promise.prototype.then = function (onFulfilled, onRejected) {
+  if (typeof onFulfilled !== 'function' && this.state === FULFILLED ||
+    typeof onRejected !== 'function' && this.state === REJECTED) {
+    return this;
+  }
+  var promise = new this.constructor(INTERNAL);
+  if (this.state !== PENDING) {
+    var resolver = this.state === FULFILLED ? onFulfilled : onRejected;
+    unwrap(promise, resolver, this.outcome);
+  } else {
+    this.queue.push(new QueueItem(promise, onFulfilled, onRejected));
+  }
+
+  return promise;
+};
+function QueueItem(promise, onFulfilled, onRejected) {
+  this.promise = promise;
+  if (typeof onFulfilled === 'function') {
+    this.onFulfilled = onFulfilled;
+    this.callFulfilled = this.otherCallFulfilled;
+  }
+  if (typeof onRejected === 'function') {
+    this.onRejected = onRejected;
+    this.callRejected = this.otherCallRejected;
+  }
+}
+QueueItem.prototype.callFulfilled = function (value) {
+  handlers.resolve(this.promise, value);
+};
+QueueItem.prototype.otherCallFulfilled = function (value) {
+  unwrap(this.promise, this.onFulfilled, value);
+};
+QueueItem.prototype.callRejected = function (value) {
+  handlers.reject(this.promise, value);
+};
+QueueItem.prototype.otherCallRejected = function (value) {
+  unwrap(this.promise, this.onRejected, value);
+};
+
+function unwrap(promise, func, value) {
+  immediate(function () {
+    var returnValue;
+    try {
+      returnValue = func(value);
+    } catch (e) {
+      return handlers.reject(promise, e);
+    }
+    if (returnValue === promise) {
+      handlers.reject(promise, new TypeError('Cannot resolve promise with itself'));
+    } else {
+      handlers.resolve(promise, returnValue);
+    }
+  });
+}
+
+handlers.resolve = function (self, value) {
+  var result = tryCatch(getThen, value);
+  if (result.status === 'error') {
+    return handlers.reject(self, result.value);
+  }
+  var thenable = result.value;
+
+  if (thenable) {
+    safelyResolveThenable(self, thenable);
+  } else {
+    self.state = FULFILLED;
+    self.outcome = value;
+    var i = -1;
+    var len = self.queue.length;
+    while (++i < len) {
+      self.queue[i].callFulfilled(value);
+    }
+  }
+  return self;
+};
+handlers.reject = function (self, error) {
+  self.state = REJECTED;
+  self.outcome = error;
+  var i = -1;
+  var len = self.queue.length;
+  while (++i < len) {
+    self.queue[i].callRejected(error);
+  }
+  return self;
+};
+
+function getThen(obj) {
+  // Make sure we only access the accessor once as required by the spec
+  var then = obj && obj.then;
+  if (obj && (typeof obj === 'object' || typeof obj === 'function') && typeof then === 'function') {
+    return function appyThen() {
+      then.apply(obj, arguments);
+    };
+  }
+}
+
+function safelyResolveThenable(self, thenable) {
+  // Either fulfill, reject or reject with error
+  var called = false;
+  function onError(value) {
+    if (called) {
+      return;
+    }
+    called = true;
+    handlers.reject(self, value);
+  }
+
+  function onSuccess(value) {
+    if (called) {
+      return;
+    }
+    called = true;
+    handlers.resolve(self, value);
+  }
+
+  function tryToUnwrap() {
+    thenable(onSuccess, onError);
+  }
+
+  var result = tryCatch(tryToUnwrap);
+  if (result.status === 'error') {
+    onError(result.value);
+  }
+}
+
+function tryCatch(func, value) {
+  var out = {};
+  try {
+    out.value = func(value);
+    out.status = 'success';
+  } catch (e) {
+    out.status = 'error';
+    out.value = e;
+  }
+  return out;
+}
+
+Promise.resolve = resolve;
+function resolve(value) {
+  if (value instanceof this) {
+    return value;
+  }
+  return handlers.resolve(new this(INTERNAL), value);
+}
+
+Promise.reject = reject;
+function reject(reason) {
+  var promise = new this(INTERNAL);
+  return handlers.reject(promise, reason);
+}
+
+Promise.all = all;
+function all(iterable) {
+  var self = this;
+  if (Object.prototype.toString.call(iterable) !== '[object Array]') {
+    return this.reject(new TypeError('must be an array'));
+  }
+
+  var len = iterable.length;
+  var called = false;
+  if (!len) {
+    return this.resolve([]);
+  }
+
+  var values = new Array(len);
+  var resolved = 0;
+  var i = -1;
+  var promise = new this(INTERNAL);
+
+  while (++i < len) {
+    allResolver(iterable[i], i);
+  }
+  return promise;
+  function allResolver(value, i) {
+    self.resolve(value).then(resolveFromAll, function (error) {
+      if (!called) {
+        called = true;
+        handlers.reject(promise, error);
+      }
+    });
+    function resolveFromAll(outValue) {
+      values[i] = outValue;
+      if (++resolved === len && !called) {
+        called = true;
+        handlers.resolve(promise, values);
+      }
+    }
+  }
+}
+
+Promise.race = race;
+function race(iterable) {
+  var self = this;
+  if (Object.prototype.toString.call(iterable) !== '[object Array]') {
+    return this.reject(new TypeError('must be an array'));
+  }
+
+  var len = iterable.length;
+  var called = false;
+  if (!len) {
+    return this.resolve([]);
+  }
+
+  var i = -1;
+  var promise = new this(INTERNAL);
+
+  while (++i < len) {
+    resolver(iterable[i]);
+  }
+  return promise;
+  function resolver(value) {
+    self.resolve(value).then(function (response) {
+      if (!called) {
+        called = true;
+        handlers.resolve(promise, response);
+      }
+    }, function (error) {
+      if (!called) {
+        called = true;
+        handlers.reject(promise, error);
+      }
+    });
+  }
+}
+
+},{"immediate":1}],3:[function(require,module,exports){
+(function (global){
+'use strict';
+if (typeof global.Promise !== 'function') {
+  global.Promise = require('./lib');
+}
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./lib":2}],4:[function(require,module,exports){
+var ahrriss=require("./ahrriss"),aboutContainer=document.getElementById("dlg-about"),galleryContainer=document.getElementById("dlg-about-images"),galleryImageNames=[],durationMs=9e3,currentGalleryIndex=-1,imagePrefix="dlg-image-",bioContainer=document.getElementById("dlg-about-bio");if(galleryContainer){var Gallery=ahrriss.firebaseDatabase.ref("Gallery");Gallery.on("value",function(e){var a=e.val();galleryImageNames=a.map(function(e){return e.imageName}),renderNextImage()})}if(bioContainer){var Description=ahrriss.firebaseDatabase.ref("Description");Description.on("value",function(e){var a=e.val();a&&(bioContainer.innerHTML=a)})}function renderNextImage(){var e=currentGalleryIndex+1;if(galleryImageNames[e]){var a=galleryImageNames[e];ahrriss.firebaseStorage.ref().child("gallery/"+a).getDownloadURL().then(function(a){var r=document.createElement("img");r.src=a,r.id=imagePrefix+e,r.addEventListener("load",function(){galleryShift()}),r.addEventListener("click",function(){window.open(a)}),galleryContainer.appendChild(r)})}}function galleryShift(){var e=currentGalleryIndex==galleryImageNames.length-1?0:currentGalleryIndex+1,a=document.getElementById(imagePrefix+e);if(a){var r=document.getElementById(imagePrefix+currentGalleryIndex);r&&r.classList.remove("active"),a.classList.add("active"),currentGalleryIndex=Number(e),ahrriss.revealSection(aboutContainer),window.setTimeout(galleryShift,durationMs)}else renderNextImage()}
+
+},{"./ahrriss":5}],5:[function(require,module,exports){
+var firebaseConfig={apiKey:"AIzaSyB4KLSd8Dsrero40lcsZh35Ok9VRnQdriY",authDomain:"die-like-gentlemen.firebaseapp.com",databaseURL:"https://die-like-gentlemen.firebaseio.com",projectId:"die-like-gentlemen",storageBucket:"gs://die-like-gentlemen.appspot.com",messagingSenderId:"1090916658810"};firebase.initializeApp(firebaseConfig);var loadingMsgAttr,loadingInterval,sections=["dlg-about","dlg-aloud","dlg-alive","dlg-contact"],revealedSections=[],queuedSections=[],loadingText="Loading",aposiopesis=" . . .";function loadingTicker(){aposiopesis=aposiopesis.length<6?aposiopesis+" .":"",document.getElementById("dlg-header").dataset.msg=loadingText+aposiopesis}function revealSection(e){var i=e.id;if(-1===revealedSections.indexOf(i)){"dlg-about"==i&&(document.body.classList.add("loaded"),window.clearInterval(loadingInterval));var n=sections.indexOf(i),t=n>0?sections[n-1]:null;t?-1!==revealedSections.indexOf(t)?_revealSection(i):-1!==queuedSections.indexOf(t)?queuedSections.push(i):queuedSections.indexOf(i)&&queuedSections.push(i):_revealSection(i);var a=n+1<sections.length?sections[n+1]:null;a&&-1!==queuedSections.indexOf(a)&&revealSection(document.getElementById(a))}}function _revealSection(e){var i=document.getElementById(e);i&&(i.classList.add("loaded"),window.setTimeout(function(){i.classList.add("revealed")},100),queuedSections=queuedSections.filter(function(i){return i!==e}),revealedSections.push(i.id))}document.addEventListener("DOMContentLoaded",function(){loadingInterval=window.setInterval(loadingTicker,500);var e=document.getElementById("dlg-contact");module.exports={firebaseDatabase:firebase.database(),firebaseStorage:firebase.storage(),revealSection:revealSection};require("./about"),require("./aloud"),require("./alive");revealSection(e)});
+
+},{"./about":4,"./alive":6,"./aloud":7}],6:[function(require,module,exports){
+var ahrriss=require("./ahrriss"),aliveContainer=document.getElementById("dlg-alive"),monthNames=["January","February","March","April","May","June","July","August","September","October","November","December"],videoContainer=document.getElementById("dlg-alive-video"),gigContainer=document.getElementById("gig-container");if(videoContainer){var VideoLinks=ahrriss.firebaseDatabase.ref("VideoLinks");VideoLinks.on("value",function(e){e.val().forEach(function(e,t){videoInit(e)})})}if(gigContainer){var Gigs=ahrriss.firebaseDatabase.ref("Gigs");Gigs.on("value",function(e){var t=e.val(),i=function(e){return e<10?"0"+e:String(e)},a=new Date;a=a.getFullYear()+"-"+i(a.getMonth()+1)+"-"+i(a.getDate());var r=t.filter(function(e){return e.Date.substring(0,10)>=a});r.sort(function(e,t){return e.Date>t.Date?1:-1}),gigContainer.innerHTML="";for(var n=0;n<r.length;n++){var s=r[n],o='<div class="gig"><div class="gig-date">'+formatDate(s.Date)+'</div><div class="gig-details"><div class="gig-city">'+s.City_State+'</div><div class="gig-venue">'+s.Venue+"</div>"+(s.Notes?'<div class="gig-notes">'+s.Notes+"</div>":"")+(s.OtherBands?'<div class="gig-bands">with '+formatOtherBands(s.OtherBands)+"</div>":"")+'</div><div class="gig-link">'+(s.Link?'<a href="'+s.Link+'" target="_blank">details</a>':"")+"</div></div>";gigContainer.innerHTML+=o}ahrriss.revealSection(aliveContainer)})}function formatDate(e){var t=Number(e.substring(5,7)),i=Number(e.substring(8,10));return monthNames[t-1].substring(0,3)+" "+i}function formatOtherBands(e){if(e){for(var t=e.split(", "),i=0;i<t.length;i++)t[i]="<span>"+t[i].trim()+"</span>";return t.join(", ")}}function videoInit(e){if(e&&"string"==typeof e){var t=e.match(/embed\/([\d\w]+)(\?start\=)*(\d*)/);if(t.length>1){var i=t[1],a=t[3]||0,r=document.createElement("div");r.setAttribute("class","media-container youtube-player");var n=document.createElement("div");n.setAttribute("data-id",i),a&&n.setAttribute("data-start",a),n.innerHTML=labnolThumb(i),n.onclick=labnolIframe,r.appendChild(n),videoContainer.appendChild(r)}}}function labnolThumb(e){return'<img src="https://i.ytimg.com/vi/ID/hqdefault.jpg">'.replace("ID",e)+'<div class="play"></div>'}function labnolIframe(){var e=document.createElement("iframe"),t="https://www.youtube.com/embed/ID?autoplay=1",i=this.dataset.id;t=t.replace("ID",i);var a=this.dataset.start;a&&(t+="&start="+a),e.setAttribute("src",t),e.setAttribute("frameborder","0"),e.setAttribute("allowfullscreen","1"),this.parentNode.replaceChild(e,this)}
+
+},{"./ahrriss":5}],7:[function(require,module,exports){
+var audioElement,playlistElement,trackElements,currentTrackNumber,ahrriss=require("./ahrriss"),lie=require("lie/polyfill"),aloudContainer=document.getElementById("dlg-aloud"),playlistContainer=document.getElementById("dlg-aloud-player"),mediaPath="/media/",dlgPlaylist=[];if(playlistContainer){var Songs=ahrriss.firebaseDatabase.ref("Songs");Songs.on("value",function(e){var t=e.val();ahrriss.firebaseDatabase.ref("Playlist").on("value",function(e){var a=e.val();if(a){for(var l=[],n=0;n<a.length;n++)for(var r=n,i=a[r],s=0;s<t.length;s++)if(t[s].Name==i.Name){var o=t[s],m="discography/"+o.Album+"/Die Like Gentlemen - "+o.Album+" - "+o.TrackNumber+" - "+o.Name+".mp3",d=ahrriss.firebaseStorage.ref().child(m);l.push(d.getDownloadURL().then(function(e){console.info({this:this,songSrc:e}),dlgPlaylist[this.playlistIndex]={src:e,title:this.songName,album:this.songAlbum}}.bind({playlistIndex:r,songName:o.Name,songAlbum:o.Album})));break}Promise.all(l).then(function(){console.info({arguments:arguments}),console.info({dlgPlaylist:dlgPlaylist}),embedAudioPlaylist(dlgPlaylist,350),ahrriss.revealSection(aloudContainer)})}})})}function embedAudioPlaylist(e,t,a){if(playlistContainer){var l=document.createElement("audio");if(l.play){l.src=e[0].src,l.controls="controls",l.controlsList="nodownload",l.preload="none",playlistContainer.appendChild(l);var n=document.createElement("ol");n.className="media-playlist";for(var r=0;r<e.length;r++){var i=document.createElement("li");0===r&&(i.className="active");var s=document.createElement("a");if(s.href=e[r].src,e[r].title){var o=document.createElement("span");o.className="media-title",o.appendChild(document.createTextNode(e[r].title)),s.appendChild(o)}if(e[r].album){var m=document.createElement("span");m.className="media-album",m.appendChild(document.createTextNode(e[r].album)),s.appendChild(m)}i.appendChild(s),n.appendChild(i)}playlistContainer.appendChild(l),playlistContainer.appendChild(n),initPlaylist(),l.volume=1}else{var d="/post_tunes/player_mp3_multi.swf",c=t||"100",u=a||"300",p=e.map(function(e){return e.src}).join("|"),h=e.map(function(e){return'"'+e.title+'"'+(e.artist?" - "+e.artist:"")}).join("|"),y={mp3:encodeURI(p),title:h,width:u,height:c,showstop:1,showvolume:0,bgcolor1:"666666",bgcolor2:"dddddd",showloading:"always"},b=[];for(var v in y)b.push(v+"="+y[v]);var f=b.join("&"),E=document.createElement("object");E.setAttribute("data",d),E.setAttribute("type","application/x-shockwave-flash"),E.setAttribute("width",u),E.setAttribute("height",c);var g=document.createElement("param");g.setAttribute("name","movie"),g.setAttribute("value",d),E.appendChild(g);var k=document.createElement("param");k.setAttribute("name","wmode"),k.setAttribute("value","transparent"),E.appendChild(k);var C=document.createElement("param");C.setAttribute("name","FlashVars"),C.setAttribute("value",f),E.appendChild(C);var A=document.createElement("embed");A.setAttribute("flashvars",f),A.setAttribute("src",d),A.setAttribute("type","application/x-shockwave-flash"),A.setAttribute("wmode","transparent"),E.setAttribute("width",u),E.setAttribute("height",c),E.appendChild(A),playlistContainer.appendChild(E)}}}function initPlaylist(){if(playlistContainer){audioElement=playlistContainer.getElementsByTagName("audio")[0],playlistElement=playlistContainer.getElementsByClassName("media-playlist")[0];var e=(trackElements=playlistElement.getElementsByTagName("a")).length;currentTrackNumber=1,audioElement.volume=.1;for(var t=0;t<trackElements.length;t++)trackElements[t].setAttribute("track",t+1),trackElements[t].addEventListener("click",function(e){e.preventDefault(),currentTrackNumber=this.getAttribute("track"),playPlaylistTrack(this)});audioElement.addEventListener("ended",function(t){currentTrackNumber<e?playPlaylistTrack(trackElements[++currentTrackNumber-1]):loadPlaylistTrack(trackElements[(currentTrackNumber=1)-1])})}}function loadPlaylistTrack(e){audioElement.src=e.getAttribute("href");e.parentElement;for(var t=0;t<trackElements.length;t++)trackElements[t]==e?e.parentElement.classList.add("active"):trackElements[t].parentElement.classList.remove("active");audioElement.load()}function playPlaylistTrack(e){loadPlaylistTrack(e),audioElement.play()}
+
+},{"./ahrriss":5,"lie/polyfill":3}]},{},[5]);

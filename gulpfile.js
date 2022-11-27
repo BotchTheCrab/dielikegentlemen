@@ -1,8 +1,8 @@
 var gulp = require('gulp'),
-    sass = require('gulp-sass'),
+    sass = require('gulp-sass')(require('sass')),
     sourcemaps = require('gulp-sourcemaps'),
     browserify = require('browserify'),
-  	uglify = require('gulp-uglify'),
+  	uglifyify = require('uglifyify'),
     source = require('vinyl-source-stream'),
   	buffer = require('vinyl-buffer');
 
@@ -34,12 +34,13 @@ function sassCompile(srcPath, destPath) {
 		.pipe(gulp.dest(destPath));
 };
 
-gulp.task('Sass-Compile', function() {
+gulp.task('Sass-Compile', function(done) {
 	sassCompile(paths.sass.root, paths.sass.destination);
+  done();
 });
 
 gulp.task('Sass-Watch', function() {
-	gulp.watch(paths.sass.sources, ['Sass-Compile']);
+  gulp.watch(paths.sass.sources, gulp.series('Sass-Compile'));
 });
 
 
@@ -50,22 +51,21 @@ gulp.task('Sass-Watch', function() {
 gulp.task('JavaScript-Bundle', function() {
 	// Grabs the application.js file
   return browserify(paths.scripts.root)
+    .transform('uglifyify')
     .bundle()
     .pipe(source(paths.scripts.destination.name))
   	.pipe(buffer())
-  	.pipe(uglify())
     .pipe(gulp.dest(paths.scripts.destination.folder));
 })
 
 gulp.task('JavaScript-Watch', function() {
-	gulp.watch(paths.scripts.sources, ['JavaScript-Bundle']);
+	gulp.watch(paths.scripts.sources, gulp.series('JavaScript-Bundle'));
 });
-
 
 
 
 ////// WATCH and BUILD
 
-gulp.task('build', ['Sass-Compile', 'JavaScript-Bundle']);
+gulp.task('build', gulp.parallel('Sass-Compile', 'JavaScript-Bundle'));
 
-gulp.task('default', ['build', 'Sass-Watch', 'JavaScript-Watch']);
+gulp.task('default', gulp.series('build', gulp.parallel('Sass-Watch', 'JavaScript-Watch')));
