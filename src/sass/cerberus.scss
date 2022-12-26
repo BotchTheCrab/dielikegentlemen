@@ -388,15 +388,8 @@ main {
     visibility: visible;
   }
 
-  #mc_embed_signup_scroll {
-    margin-top: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-
-    input {
-      margin: 0 5px;
-    }
+  iframe {
+    border: 0;
   }
 }
 
