@@ -88,6 +88,10 @@ if (playlistContainer) {
 function embedAudioPlaylist(audioPlaylist, height, width) {
   if (!playlistContainer) { return; }
 
+  while(playlistContainer.firstChild){
+    playlistContainer.removeChild(playlistContainer.firstChild);
+  }
+
   var audio = document.createElement('audio');
   if (audio.play) {
     // HTML5 <audio> element is supported
