@@ -106,7 +106,7 @@ a {
 }
 
 /* promo banner, styles self-contained */
-/* .banner {
+.banner {
   display: none;
   max-width: 1000px;
   margin: 0 auto 25px;
@@ -130,7 +130,7 @@ a {
     width: 100%;
   }
 
-} */
+}
 
 main {
   max-width: 1000px;
@@ -355,6 +355,11 @@ main {
 
     a:hover {
       text-decoration: none;
+    }
+
+    .year {
+      font-size: 10pt;
+      opacity: 0.8;
     }
   }
 
