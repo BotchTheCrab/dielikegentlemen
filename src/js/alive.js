@@ -31,24 +31,24 @@ if (gigContainer) {
 
     // filter out past gigs
     // format: YYYY-MM-DD ...
-    var today = new Date();
-    today = today.getFullYear() + "-" + _zeroPad(today.getMonth() + 1) + "-" + _zeroPad(today.getDate());
-    var upcomingGigs = allGigs.filter(function(gig) {
-      var gigDate = gig.Date.substring(0,10);
-      return gigDate >= today;
-    });
+    // var today = new Date();
+    // today = today.getFullYear() + "-" + _zeroPad(today.getMonth() + 1) + "-" + _zeroPad(today.getDate());
+    // var gigsToDisplay = allGigs.filter(function(gig) {
+    //   var gigDate = gig.Date.substring(0,10);
+    //   return gigDate >= today;
+    // });
 
-    // sort by date
-    upcomingGigs.sort(function(a, b) {
-      return a.Date > b.Date ? 1 : -1;
+    // sort by date (latest to oldest)
+    allGigs.sort(function(a, b) {
+      return a.Date < b.Date ? 1 : -1;
     });
-    // console.info({ upcomingGigs: upcomingGigs })
+    // console.info({ gigsToDisplay: upcomingGigs })
 
     gigContainer.innerHTML = '';
 
     // render upcoming gigs
-    for (var x = 0; x < upcomingGigs.length; x++) {
-      var gig = upcomingGigs[x];
+    for (var x = 0; x < allGigs.length; x++) {
+      var gig = allGigs[x];
 
       var gigHtml = '' +
         '<div class="gig">' +
