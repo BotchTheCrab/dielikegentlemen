@@ -4,7 +4,7 @@ var ahrriss = require('./ahrriss');
 
 var aliveContainer = document.getElementById('dlg-alive');
 
-var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+// var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 var videoContainer = document.getElementById('dlg-alive-video');
 var gigContainer = document.getElementById('gig-container');
@@ -73,7 +73,9 @@ if (gigContainer) {
 function formatDate(timestamp) {
   var month = Number(timestamp.substring(5,7));
   var date = Number(timestamp.substring(8,10));
-  return monthNames[month - 1].substring(0,3) + ' ' + date;
+  var year = Number(timestamp.substring(2,4));
+  // return monthNames[month - 1].substring(0,3) + ' ' + date;
+  return `${month}/${date}/${year}`;
 }
 
 function formatOtherBands(sBands) {
